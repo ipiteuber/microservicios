@@ -1,0 +1,250 @@
+{
+  "info": {
+    "_postman_id": "409e1886-9772-4bd6-84ff-b4fa7461c984",
+    "name": "ms-ordenes-mascotas",
+    "description": "Coleccion de pruebas para el microservicio de ordenes de productos para mascotas (DSY2201 - Semana 6). Puerto por defecto: 8081",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "GET todos los productos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos"]
+            }
+          }
+        },
+        {
+          "name": "GET producto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos", "1"]
+            }
+          }
+        },
+        {
+          "name": "GET productos por categoria",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/categoria/Alimentacion",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos", "categoria", "Alimentacion"]
+            }
+          }
+        },
+        {
+          "name": "POST crear producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Rascador para Gatos\",\n  \"descripcion\": \"Rascador de madera con alfombra, 80cm de altura.\",\n  \"precio\": 19990,\n  \"categoria\": \"Accesorios\",\n  \"stock\": 25\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/productos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos"]
+            }
+          }
+        },
+        {
+          "name": "PUT actualizar producto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Alimento Premium para Perros\",\n  \"descripcion\": \"Alimento seco premium para perros adultos, saco de 15 kg. Nueva formula.\",\n  \"precio\": 34990,\n  \"categoria\": \"Alimentacion\",\n  \"stock\": 80\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos", "1"]
+            }
+          }
+        },
+        {
+          "name": "DELETE producto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/productos/9",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "productos", "9"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ordenes",
+      "item": [
+        {
+          "name": "GET todas las ordenes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ordenes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ordenes"]
+            }
+          }
+        },
+        {
+          "name": "GET ordenes filtradas por estado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ordenes?estado=PENDIENTE",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ordenes"],
+              "query": [
+                {
+                  "key": "estado",
+                  "value": "PENDIENTE"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "GET orden por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ordenes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ordenes", "1"]
+            }
+          }
+        },
+        {
+          "name": "GET estado de una orden",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ordenes/1/estado",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ordenes", "1", "estado"]
+            }
+          }
+        },
+        {
+          "name": "POST crear orden",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCliente\": \"Paola Riquelme\",\n  \"emailCliente\": \"paola.riquelme@mail.cl\",\n  \"items\": [\n    {\n      \"productoId\": 2,\n      \"cantidad\": 2\n    },\n    {\n      \"productoId\": 4,\n      \"cantidad\": 1\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/ordenes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ordenes"]
+            }
+          }
+        },
+        {
+          "name": "PUT actualizar orden",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreCliente\": \"Maria Gonzalez\",\n  \"emailCliente\": \"maria.gonzalez@mail.cl\",\n  \"items\": [\n    {\n      \"productoId\": 1,\n      \"cantidad\": 3\n    },\n    {\n      \"productoId\": 7,\n      \"cantidad\": 5\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/ordenes/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ordenes", "1"]
+            }
+          }
+        },
+        {
+          "name": "PUT confirmar orden",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ordenes/1/confirmar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ordenes", "1", "confirmar"]
+            }
+          }
+        },
+        {
+          "name": "PUT cancelar orden",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ordenes/1/cancelar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ordenes", "1", "cancelar"]
+            }
+          }
+        },
+        {
+          "name": "DELETE orden",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/ordenes/3",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "ordenes", "3"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

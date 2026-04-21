@@ -1,0 +1,254 @@
+{
+  "info": {
+    "_postman_id": "0733fc3b-0510-4d1a-a647-1dab450cfbfc",
+    "name": "ms-citas-medicas",
+    "description": "Coleccion de pruebas para el microservicio de citas medicas (DSY2201 - Semana 6). Puerto por defecto: 8082",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8082",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Doctores",
+      "item": [
+        {
+          "name": "GET todos los doctores",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/doctores",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctores"]
+            }
+          }
+        },
+        {
+          "name": "GET doctor por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/doctores/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctores", "1"]
+            }
+          }
+        },
+        {
+          "name": "GET doctores por especialidad",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/doctores/especialidad/Medicina General",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctores", "especialidad", "Medicina General"]
+            }
+          }
+        },
+        {
+          "name": "POST crear doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Dr. Fernando Reyes\",\n  \"especialidad\": \"Traumatologia\",\n  \"horarioInicio\": \"09:00\",\n  \"horarioFin\": \"18:00\",\n  \"disponible\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/doctores",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctores"]
+            }
+          }
+        },
+        {
+          "name": "PUT actualizar doctor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Dra. Maria Gonzalez\",\n  \"especialidad\": \"Medicina General\",\n  \"horarioInicio\": \"08:00\",\n  \"horarioFin\": \"17:00\",\n  \"disponible\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/doctores/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctores", "1"]
+            }
+          }
+        },
+        {
+          "name": "DELETE doctor",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/doctores/6",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "doctores", "6"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Citas Medicas",
+      "item": [
+        {
+          "name": "GET todas las citas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/citas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "citas"]
+            }
+          }
+        },
+        {
+          "name": "GET cita por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/citas/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "citas", "1"]
+            }
+          }
+        },
+        {
+          "name": "GET citas por RUT paciente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/citas/paciente/12.345.678-9",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "citas", "paciente", "12.345.678-9"]
+            }
+          }
+        },
+        {
+          "name": "GET disponibilidad doctor",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/citas/disponibilidad?doctorId=1&fecha=2026-06-01",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "citas", "disponibilidad"],
+              "query": [
+                {
+                  "key": "doctorId",
+                  "value": "1"
+                },
+                {
+                  "key": "fecha",
+                  "value": "2026-06-01"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "POST programar cita",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombrePaciente\": \"Sofia Martinez Reyes\",\n  \"rutPaciente\": \"19.876.543-2\",\n  \"doctorId\": 1,\n  \"fecha\": \"2026-06-01\",\n  \"hora\": \"11:00\",\n  \"motivo\": \"Control anual de presion arterial\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/citas",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "citas"]
+            }
+          }
+        },
+        {
+          "name": "PUT actualizar cita",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombrePaciente\": \"Juan Perez Soto\",\n  \"rutPaciente\": \"12.345.678-9\",\n  \"doctorId\": 1,\n  \"fecha\": \"2026-06-15\",\n  \"hora\": \"10:00\",\n  \"motivo\": \"Control general anual (reprogramado)\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/citas/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "citas", "1"]
+            }
+          }
+        },
+        {
+          "name": "PUT cancelar cita",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/citas/1/cancelar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "citas", "1", "cancelar"]
+            }
+          }
+        },
+        {
+          "name": "PUT completar cita",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/citas/2/completar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "citas", "2", "completar"]
+            }
+          }
+        },
+        {
+          "name": "DELETE cita",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/citas/4",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "citas", "4"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
