@@ -1,91 +1,69 @@
 package com.duoc.ordenesmascotas.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Modelo que representa una orden de compra con sus items.
- */
+// Entidad OrdenCompra - tabla ORDEN_COMPRA
+// Estados: PENDIENTE (default) -> CONFIRMADA / CANCELADA
+@Entity
+@Table(name = "orden_compra")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrdenCompra {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "El nombre del cliente es obligatorio")
+    @Size(max = 120)
+    @Column(name = "nombre_cliente", nullable = false, length = 120)
     private String nombreCliente;
+
+    @NotBlank(message = "El email del cliente es obligatorio")
+    @Email(message = "Formato de email no valido")
+    @Size(max = 120)
+    @Column(name = "email_cliente", nullable = false, length = 120)
     private String emailCliente;
-    private String fechaCreacion;
-    private List<ItemOrden> items;
-    private double total;
-    private String estado; // PENDIENTE, CONFIRMADA, CANCELADA
 
-    /** Constructor vacio. */
-    public OrdenCompra() {
-    }
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "fecha_creacion", nullable = false)
+    private LocalDate fechaCreacion;
 
-    /** Constructor completo. */
-    public OrdenCompra(Long id, String nombreCliente, String emailCliente, String fechaCreacion,
-                       List<ItemOrden> items, double total, String estado) {
-        this.id = id;
-        this.nombreCliente = nombreCliente;
-        this.emailCliente = emailCliente;
-        this.fechaCreacion = fechaCreacion;
-        this.items = items;
-        this.total = total;
-        this.estado = estado;
-    }
+    @Column(name = "total", nullable = false)
+    private Double total;
 
-    // Getters y setters
+    @Column(name = "estado", nullable = false, length = 15)
+    private String estado;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombreCliente() {
-        return nombreCliente;
-    }
-
-    public void setNombreCliente(String nombreCliente) {
-        this.nombreCliente = nombreCliente;
-    }
-
-    public String getEmailCliente() {
-        return emailCliente;
-    }
-
-    public void setEmailCliente(String emailCliente) {
-        this.emailCliente = emailCliente;
-    }
-
-    public String getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(String fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public List<ItemOrden> getItems() {
-        return items;
-    }
-
-    public void setItems(List<ItemOrden> items) {
-        this.items = items;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+    // OneToMany con cascade ALL: al guardar la orden se guardan los items,
+    // al eliminarla se eliminan tambien (orphanRemoval).
+    // @JsonManagedReference + @JsonBackReference en ItemOrden evitan el loop en JSON.
+    @Valid
+    @NotEmpty(message = "La orden debe tener al menos un item")
+    @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<ItemOrden> items = new ArrayList<>();
 }

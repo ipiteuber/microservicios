@@ -1,77 +1,53 @@
 package com.duoc.citasmedicas.model;
 
-/**
- * Modelo que representa un doctor.
- * Contiene nombre, especialidad, horario y disponibilidad.
- */
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+// Entidad Doctor - tabla DOCTOR en Oracle
+@Entity
+@Table(name = "doctor")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Doctor {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "El nombre del doctor es obligatorio")
+    @Size(max = 100)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
+
+    @NotBlank(message = "La especialidad es obligatoria")
+    @Size(max = 60)
+    @Column(name = "especialidad", nullable = false, length = 60)
     private String especialidad;
+
+    // Formato HH:mm (24h)
+    @NotBlank(message = "El horario de inicio es obligatorio")
+    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "El horario debe tener formato HH:mm")
+    @Column(name = "horario_inicio", nullable = false, length = 5)
     private String horarioInicio;
+
+    @NotBlank(message = "El horario de fin es obligatorio")
+    @Pattern(regexp = "^([01]\\d|2[0-3]):[0-5]\\d$", message = "El horario debe tener formato HH:mm")
+    @Column(name = "horario_fin", nullable = false, length = 5)
     private String horarioFin;
-    private boolean disponible;
 
-    /** Constructor vacio. */
-    public Doctor() {
-    }
-
-    /** Constructor completo. */
-    public Doctor(Long id, String nombre, String especialidad, String horarioInicio, String horarioFin, boolean disponible) {
-        this.id = id;
-        this.nombre = nombre;
-        this.especialidad = especialidad;
-        this.horarioInicio = horarioInicio;
-        this.horarioFin = horarioFin;
-        this.disponible = disponible;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEspecialidad() {
-        return especialidad;
-    }
-
-    public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
-    }
-
-    public String getHorarioInicio() {
-        return horarioInicio;
-    }
-
-    public void setHorarioInicio(String horarioInicio) {
-        this.horarioInicio = horarioInicio;
-    }
-
-    public String getHorarioFin() {
-        return horarioFin;
-    }
-
-    public void setHorarioFin(String horarioFin) {
-        this.horarioFin = horarioFin;
-    }
-
-    public boolean isDisponible() {
-        return disponible;
-    }
-
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
-    }
+    @NotNull(message = "La disponibilidad es obligatoria")
+    @Column(name = "disponible", nullable = false)
+    private Boolean disponible;
 }

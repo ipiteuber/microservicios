@@ -1,7 +1,7 @@
-com\duoc\citasmedicas\controller\DoctorController.class
-com\duoc\citasmedicas\model\CitaMedica.class
 com\duoc\citasmedicas\controller\CitaController.class
-com\duoc\citasmedicas\model\Doctor.class
-com\duoc\citasmedicas\service\CitaService.class
 com\duoc\citasmedicas\CitasMedicasApplication.class
 com\duoc\citasmedicas\service\DoctorService.class
+com\duoc\citasmedicas\controller\DoctorController.class
+com\duoc\citasmedicas\model\CitaMedica.class
+com\duoc\citasmedicas\model\Doctor.class
+com\duoc\citasmedicas\service\CitaService.class

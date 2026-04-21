@@ -1,8 +1,15 @@
-com\duoc\ordenesmascotas\model\Producto.class
 com\duoc\ordenesmascotas\controller\ProductoController.class
+com\duoc\ordenesmascotas\exception\GlobalExceptionHandler.class
+com\duoc\ordenesmascotas\exception\ResourceNotFoundException.class
+com\duoc\ordenesmascotas\repository\ProductoRepository.class
+com\duoc\ordenesmascotas\service\impl\OrdenServiceImpl.class
+com\duoc\ordenesmascotas\service\impl\ProductoServiceImpl.class
+com\duoc\ordenesmascotas\repository\OrdenCompraRepository.class
+com\duoc\ordenesmascotas\model\OrdenCompra.class
+com\duoc\ordenesmascotas\model\Producto.class
+com\duoc\ordenesmascotas\exception\BusinessValidationException.class
 com\duoc\ordenesmascotas\service\ProductoService.class
 com\duoc\ordenesmascotas\OrdenesMascotasApplication.class
 com\duoc\ordenesmascotas\controller\OrdenController.class
-com\duoc\ordenesmascotas\model\OrdenCompra.class
 com\duoc\ordenesmascotas\model\ItemOrden.class
 com\duoc\ordenesmascotas\service\OrdenService.class
