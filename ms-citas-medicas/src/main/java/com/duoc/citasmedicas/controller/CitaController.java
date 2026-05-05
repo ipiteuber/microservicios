@@ -1,96 +1,88 @@
 package com.duoc.citasmedicas.controller;
 
-import com.duoc.citasmedicas.model.CitaMedica;
-import com.duoc.citasmedicas.service.CitaService;
-import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+  import java.util.List;
+  import java.util.stream.Collectors;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+  import org.springframework.hateoas.CollectionModel;
+  import org.springframework.hateoas.EntityModel;
+  import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+  import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+  import org.springframework.http.HttpStatus;
+  import org.springframework.http.ResponseEntity;
+  import org.springframework.web.bind.annotation.DeleteMapping;
+  import org.springframework.web.bind.annotation.GetMapping;
+  import org.springframework.web.bind.annotation.PathVariable;
+  import org.springframework.web.bind.annotation.PostMapping;
+  import org.springframework.web.bind.annotation.PutMapping;
+  import org.springframework.web.bind.annotation.RequestBody;
+  import org.springframework.web.bind.annotation.RequestMapping;
+  import org.springframework.web.bind.annotation.RestController;
 
-// Controlador REST de citas medicas. Maneja programacion, cancelacion, completacion y consulta de disponibilidad.
-@RestController
-@RequestMapping("/api/citas")
-@Slf4j
-public class CitaController {
+  import com.duoc.citasmedicas.model.CitaMedica;
+  import com.duoc.citasmedicas.service.CitaService;
 
-    private final CitaService citaService;
+  import jakarta.validation.Valid;
+  import lombok.extern.slf4j.Slf4j;
 
-    public CitaController(CitaService citaService) {
-        this.citaService = citaService;
-    }
+  @RestController
+  @RequestMapping("/api/citas")
+  @Slf4j
+  public class CitaController {
 
-    @GetMapping
-    public ResponseEntity<List<CitaMedica>> listarCitas() {
-        return ResponseEntity.ok(citaService.listarCitas());
-    }
+      private final CitaService citaService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CitaMedica> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(citaService.buscarPorId(id));
-    }
+      public CitaController(CitaService citaService) {
+          this.citaService = citaService;
+      }
 
-    @GetMapping("/paciente/{rut}")
-    public ResponseEntity<List<CitaMedica>> buscarPorPaciente(@PathVariable String rut) {
-        return ResponseEntity.ok(citaService.buscarPorPaciente(rut));
-    }
+      @GetMapping
+      public CollectionModel<EntityModel<CitaMedica>> listarCitas() {
+          List<EntityModel<CitaMedica>> citas = citaService.listarCitas().stream()
+                  .map(this::toEntityModel)
+                  .collect(Collectors.toList());
 
-    // Devuelve las horas libres de un doctor en una fecha determinada
-    @GetMapping("/disponibilidad")
-    public ResponseEntity<Object> consultarDisponibilidad(
-            @RequestParam Long doctorId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
+          return CollectionModel.of(citas,
+                  linkTo(methodOn(CitaController.class).listarCitas()).withSelfRel());
+      }
 
-        List<String> horas = citaService.consultarDisponibilidad(doctorId, fecha);
-        return ResponseEntity.ok(Map.of(
-                "doctorId", doctorId,
-                "fecha", fecha.toString(),
-                "horasDisponibles", horas
-        ));
-    }
+      @GetMapping("/{id}")
+      public EntityModel<CitaMedica> buscarPorId(@PathVariable Long id) {
+          return toEntityModel(citaService.buscarPorId(id));
+      }
 
-    @PostMapping
-    public ResponseEntity<CitaMedica> programarCita(@Valid @RequestBody CitaMedica cita) {
-        log.info("POST /api/citas - paciente: {}", cita.getNombrePaciente());
-        CitaMedica programada = citaService.programarCita(cita);
-        return ResponseEntity.status(HttpStatus.CREATED).body(programada);
-    }
+      @PostMapping
+      public ResponseEntity<EntityModel<CitaMedica>> programarCita(@Valid @RequestBody CitaMedica
+  cita) {
+          log.info("POST /api/citas");
+          CitaMedica programada = citaService.programarCita(cita);
+          return ResponseEntity.status(HttpStatus.CREATED).body(toEntityModel(programada));
+      }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CitaMedica> actualizarCita(@PathVariable Long id,
-                                                     @Valid @RequestBody CitaMedica cita) {
-        log.info("PUT /api/citas/{}", id);
-        return ResponseEntity.ok(citaService.actualizarCita(id, cita));
-    }
+      @PutMapping("/{id}")
+      public EntityModel<CitaMedica> actualizarCita(@PathVariable Long id,
+                                                    @Valid @RequestBody CitaMedica cita) {
+          log.info("PUT /api/citas/{}", id);
+          return toEntityModel(citaService.actualizarCita(id, cita));
+      }
 
-    @PutMapping("/{id}/cancelar")
-    public ResponseEntity<CitaMedica> cancelarCita(@PathVariable Long id) {
-        log.info("Cancelando cita {}", id);
-        return ResponseEntity.ok(citaService.cancelarCita(id));
-    }
+      @PutMapping("/{id}/cancelar")
+      public EntityModel<CitaMedica> cancelarCita(@PathVariable Long id) {
+          log.info("Cancelando cita {}", id);
+          return toEntityModel(citaService.cancelarCita(id));
+      }
 
-    @PutMapping("/{id}/completar")
-    public ResponseEntity<CitaMedica> completarCita(@PathVariable Long id) {
-        return ResponseEntity.ok(citaService.completarCita(id));
-    }
+      @DeleteMapping("/{id}")
+      public ResponseEntity<Void> eliminarCita(@PathVariable Long id) {
+          log.info("DELETE /api/citas/{}", id);
+          citaService.eliminarCita(id);
+          return ResponseEntity.noContent().build();
+      }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCita(@PathVariable Long id) {
-        log.info("DELETE /api/citas/{}", id);
-        citaService.eliminarCita(id);
-        return ResponseEntity.noContent().build();
-    }
+      private EntityModel<CitaMedica> toEntityModel(CitaMedica cita) {
+          return EntityModel.of(cita,
+                  linkTo(methodOn(CitaController.class).buscarPorId(cita.getId())).withSelfRel(),
+                  linkTo(methodOn(CitaController.class).listarCitas()).withRel("todas"),
+
+  linkTo(methodOn(CitaController.class).cancelarCita(cita.getId())).withRel("cancelar"));
+      }
 }
