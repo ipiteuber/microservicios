@@ -1,0 +1,22 @@
+services:
+  ms-citas:
+    build:
+      context: ./ms-citas-medicas
+    container_name: ms-citas
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./wallet:/opt/oracle/wallet
+    environment:
+      - TNS_ADMIN=/opt/oracle/wallet
+
+  ms-ordenes:
+    build:
+      context: ./ms-ordenes-mascotas
+    container_name: ms-ordenes
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./wallet:/opt/oracle/wallet
+    environment:
+      - TNS_ADMIN=/opt/oracle/wallet

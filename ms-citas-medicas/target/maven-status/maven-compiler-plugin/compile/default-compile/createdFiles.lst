@@ -1,7 +1,14 @@
+com\duoc\citasmedicas\service\impl\DoctorServiceImpl.class
 com\duoc\citasmedicas\controller\CitaController.class
+com\duoc\citasmedicas\exception\GlobalExceptionHandler.class
 com\duoc\citasmedicas\CitasMedicasApplication.class
+com\duoc\citasmedicas\exception\ResourceNotFoundException.class
 com\duoc\citasmedicas\service\DoctorService.class
 com\duoc\citasmedicas\controller\DoctorController.class
+com\duoc\citasmedicas\repository\DoctorRepository.class
+com\duoc\citasmedicas\service\impl\CitaServiceImpl.class
 com\duoc\citasmedicas\model\CitaMedica.class
+com\duoc\citasmedicas\exception\BusinessValidationException.class
 com\duoc\citasmedicas\model\Doctor.class
 com\duoc\citasmedicas\service\CitaService.class
+com\duoc\citasmedicas\repository\CitaMedicaRepository.class
