@@ -3,6 +3,22 @@ target/
 *.class
 *.jar
 *.war
+*.ear
+*.nar
+
+# Wallet Oracle
+wallet/
+Wallet/
+Wallet_*/
+*.sso
+*.p12
+*.pem
+*.jks
+ojdbc.properties
+sqlnet.ora
+tnsnames.ora
+truststore.jks
+keystore.jks
 
 # IDE files
 .idea/
@@ -10,17 +26,42 @@ target/
 *.iml
 *.ipr
 *.iws
+out/
 
-# Mac
+# VS Code
+.vscode/
+
+# Eclipse
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Sistemas operativos
 .DS_Store
+Thumbs.db
+desktop.ini
 
 # Logs
 *.log
+logs/
+spring.log
 
-# Maven
+# Maven wrapper
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
 # Environment / local config
 *.env
 .env.local
+application-local.properties
+application-secrets.properties
+secrets.properties

@@ -1,0 +1,23 @@
+# Maven build artifacts (se regeneran con mvn package)
+target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+spring.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Configuracion local
+application-local.properties
+*.env
+.env.local
