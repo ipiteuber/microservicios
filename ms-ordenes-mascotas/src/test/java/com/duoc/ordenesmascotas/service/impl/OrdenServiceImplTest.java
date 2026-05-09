@@ -1,23 +1,24 @@
 package com.duoc.ordenesmascotas.service.impl;
 
+import java.util.Optional;
+
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.duoc.ordenesmascotas.exception.BusinessValidationException;
 import com.duoc.ordenesmascotas.model.OrdenCompra;
 import com.duoc.ordenesmascotas.repository.OrdenCompraRepository;
 import com.duoc.ordenesmascotas.service.ProductoService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 // Pruebas unitarias del servicio de ordenes de compra
 @ExtendWith(MockitoExtension.class)
@@ -71,5 +72,19 @@ class OrdenServiceImplTest {
         // When + Then
         assertThrows(BusinessValidationException.class,
                 () -> ordenService.cancelarOrden(1L));
+    }
+
+    @Test
+    void crearOrden_conDatosValidos_retornaOrdenConEstadoPendiente() {
+        // Given - Mock del repositorio que persiste la orden
+        when(ordenRepository.save(any(OrdenCompra.class))).thenReturn(ordenEjemplo);
+
+        // When - Crear la orden
+        OrdenCompra resultado = ordenService.crearOrden(ordenEjemplo);
+
+        // Then - Verificar estado inicial PENDIENTE y datos del cliente
+        assertNotNull(resultado);
+        assertEquals("Maria Gonzalez", resultado.getNombreCliente());
+        assertEquals("PENDIENTE", resultado.getEstado());
     }
 }

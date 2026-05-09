@@ -1,23 +1,26 @@
 package com.duoc.citasmedicas.service.impl;
 
-import com.duoc.citasmedicas.exception.ResourceNotFoundException;
-import com.duoc.citasmedicas.model.CitaMedica;
-import com.duoc.citasmedicas.repository.CitaMedicaRepository;
-import com.duoc.citasmedicas.service.DoctorService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.duoc.citasmedicas.exception.ResourceNotFoundException;
+import com.duoc.citasmedicas.model.CitaMedica;
+import com.duoc.citasmedicas.model.Doctor;
+import com.duoc.citasmedicas.repository.CitaMedicaRepository;
+import com.duoc.citasmedicas.service.DoctorService;
 
 // Pruebas unitarias del servicio de citas medicas
 @ExtendWith(MockitoExtension.class)
@@ -73,5 +76,29 @@ class CitaServiceImplTest {
         // When + Then
         assertThrows(ResourceNotFoundException.class,
                 () -> citaService.buscarPorId(999L));
+    }
+
+    @Test
+    void programarCita_conDatosValidos_retornaCitaConEstadoProgramada() {
+        // Given - Mock del doctor existente y disponible
+        Doctor doctorMock = new Doctor();
+        doctorMock.setId(1L);
+        doctorMock.setNombre("Dra. Maria Gonzalez");
+        doctorMock.setEspecialidad("Medicina General");
+        doctorMock.setHorarioInicio("08:00");
+        doctorMock.setHorarioFin("16:00");
+        doctorMock.setDisponible(true);
+
+        // Mock del servicio: Cuando piden doctor con ID 1, devuelve doctorMock
+        when(doctorService.buscarPorId(1L)).thenReturn(doctorMock);
+        when(citaRepository.save(any(CitaMedica.class))).thenReturn(citaEjemplo);
+
+        // When - Programar cita
+        CitaMedica resultado = citaService.programarCita(citaEjemplo);
+
+        // Then - Verificar estado y datos
+        assertNotNull(resultado);
+        assertEquals("Juan Perez Soto", resultado.getNombrePaciente());
+        assertEquals("PROGRAMADA", resultado.getEstado());
     }
 }

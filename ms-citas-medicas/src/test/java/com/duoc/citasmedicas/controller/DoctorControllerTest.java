@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -82,5 +83,28 @@ class DoctorControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.nombre").value("Dra. Maria Gonzalez"))
                 .andExpect(jsonPath("$.especialidad").value("Medicina General"));
+    }
+
+    @Test
+    void actualizarDoctor_cuandoExiste_retorna200ConDatosActualizados() throws Exception {
+        // Given - Doctor con datos actualizados
+        Doctor doctorActualizado = new Doctor();
+        doctorActualizado.setId(1L);
+        doctorActualizado.setNombre("Dra. Maria Gonzalez Actualizada");
+        doctorActualizado.setEspecialidad("Cardiologia");
+        doctorActualizado.setHorarioInicio("09:00");
+        doctorActualizado.setHorarioFin("18:00");
+        doctorActualizado.setDisponible(true);
+
+        when(doctorService.actualizarDoctor(any(Long.class), any(Doctor.class)))
+                .thenReturn(doctorActualizado);
+
+        // When + Then
+        mockMvc.perform(put("/api/doctores/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(doctorActualizado)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Dra. Maria Gonzalez Actualizada"))
+                .andExpect(jsonPath("$.especialidad").value("Cardiologia"));
     }
 }
